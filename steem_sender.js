@@ -20,7 +20,6 @@ const custom_json = (my_id, my_data) => {
 }
 
 function transfer(to, amount, memo) {
-  const transfer = quantity.concat(' ', type);
   const transf = new Object();
   transf.from = account;
   transf.to = to;
