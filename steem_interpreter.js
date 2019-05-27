@@ -4,18 +4,18 @@ const db = require("./db_manager.js");
 const steem_sender = require("./steem_sender.js");
 
 
-async function onInstitutionListCmdReceive(sender, customJson, blockNum, transactionId) {
+async function onInstitutionListCmdReceive(sender, customJson, blockNum, transactionNum) {
   if (customJson.command == "confirmation" || customJson.command == undefined)
     return;
   console.log("new customjson:")
   console.log(customJson);
   var response = {};
   response.command = 'confirmation';
-  response.transaction = transactionId;
+  response.transaction = blockNum + ':' + transactionNum;
   response.status = 'UNKNWON';
   try {
     if (customJson.command == "create") {
-      var institutionList = new InstitutionList(blockNum + ':' + transactionId, sender);
+      var institutionList = new InstitutionList(blockNum + ':' + transactionNum, sender);
       db.insertInstitutionList(institutionList);
     } else {
       if (customJson.id == undefined)
@@ -55,14 +55,14 @@ async function onInstitutionListCmdReceive(sender, customJson, blockNum, transac
   steem_sender.log('institutionList', response);
 }
 
-async function onVacancyCmdReceive(sender, customJson, blockNum, transactionId, timestamp) {
+async function onVacancyCmdReceive(sender, customJson, blockNum, transactionNum, timestamp) {
   if (customJson.command == "confirmation" || customJson.command == undefined)
     return;
   console.log("new customjson:")
   console.log(customJson);
   var response = {};
   response.command = 'confirmation';
-  response.transaction = transactionId;
+  response.transaction = blockNum + ':' + transactionNum;
   response.status = 'UNKNWON';
   try {
     if (customJson.command == "create") {
@@ -85,7 +85,7 @@ async function onVacancyCmdReceive(sender, customJson, blockNum, transactionId, 
       if (!Array.isArray(customJson.weights))
         throw "weights need to be array";
       var institutionList = await db.getInstitutionList(customJson.institutionListID);
-      var vacancy = new Vacancy(blockNum + ":" + transactionId,
+      var vacancy = new Vacancy(blockNum + ':' + transactionNum,
                                                     sender,
                                                     institutionList._id,
                                                     customJson.price,

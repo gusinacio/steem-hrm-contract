@@ -1,7 +1,7 @@
 const dsteem = require('dsteem');
 const interpreter = require('./steem_interpreter.js');
 
-const account = 'gustavoinacio';
+const account = proccess.env.ACCOUNT;
 let opts = {};
 
 opts.addressPrefix = 'STM';
@@ -24,11 +24,11 @@ async function main() {
                 if(custom_json.id == "institutionList") {
                   interpreter.onInstitutionListCmdReceive(
                                   custom_json.required_posting_auths[0], JSON.parse(custom_json.json),
-                                  transaction.block_num, transaction.transaction_id);
+                                  transaction.block_num, i);
                 } else if(custom_json.id == "vacancy") {
                   interpreter.onVacancyCmdReceive(custom_json.required_posting_auths[0],
                                   JSON.parse(custom_json.json), transaction.block_num,
-                                  transaction.transaction_id,
+                                  i,
                                   block.timestamp);
                 }
               } else if(transaction.operations[0][0] == "transfer"){

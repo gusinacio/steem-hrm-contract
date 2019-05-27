@@ -2,7 +2,7 @@ const InstitutionList = require("./institution_list.js");
 const Vacancy = require("./vacancy.js");
 
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/blockchaindb";
+var url = proccess.env.MONGO_URI;
 
 
 function insertInstitutionList(il) {
