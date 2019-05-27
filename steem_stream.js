@@ -23,17 +23,18 @@ async function main() {
                 var custom_json = transaction.operations[0][1];
                 if(custom_json.id == "institutionList") {
                   interpreter.onInstitutionListCmdReceive(
-                                  custom_json.required_posting_auths, JSON.parse(custom_json.json),
+                                  custom_json.required_posting_auths[0], JSON.parse(custom_json.json),
                                   transaction.block_num, transaction.transaction_id);
                 } else if(custom_json.id == "vacancy") {
-                  interpreter.onVacancyCmdReceive(custom_json.required_posting_auths,
+                  interpreter.onVacancyCmdReceive(custom_json.required_posting_auths[0],
                                   JSON.parse(custom_json.json), transaction.block_num,
                                   transaction.transaction_id,
                                   block.timestamp);
                 }
               } else if(transaction.operations[0][0] == "transfer"){
                 var transfer = transaction.operations[0][1];
-                if (transfer.to == account) {
+                if (transfer.to === account) {
+                  console.log(transfer);
                   interpreter.onVacancyTransaction(transfer.from, transfer.amount, transfer.memo);
                 }
               }

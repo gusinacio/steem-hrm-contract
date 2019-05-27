@@ -1,9 +1,8 @@
 const dsteem = require('dsteem')
 const client = new dsteem.Client('https://anyx.io')
 
-const account = 'gustavoinacio'
-const active_key = 'key'
-const private_key = 'key'
+const account = 'account'
+const active_key = 'active_key'
 
 const custom_json = (my_id, my_data) => {
     const key = dsteem.PrivateKey.fromString(active_key)
@@ -25,7 +24,8 @@ function transfer(to, amount, memo) {
   transf.to = to;
   transf.amount = amount;
   transf.memo = memo;
-  client.broadcast.transfer(transf, private_key).then(
+  const key = dsteem.PrivateKey.fromString(active_key)
+  client.broadcast.transfer(transf, key).then(
     function(result) {
         console.log(
             'included in block: ' + result.block_num,

@@ -1,7 +1,7 @@
 const InstitutionList = require("./institution_list.js");
 const Vacancy = require("./vacancy.js");
 const db = require("./db_manager.js");
-const steam_sender = require("./steem_sender.js");
+const steem_sender = require("./steem_sender.js");
 
 
 async function onInstitutionListCmdReceive(sender, customJson, blockNum, transactionId) {
@@ -52,7 +52,7 @@ async function onInstitutionListCmdReceive(sender, customJson, blockNum, transac
     response.message = e;
     console.log(e);
   }
-  steam_sender.log('institutionList', response);
+  steem_sender.log('institutionList', response);
 }
 
 async function onVacancyCmdReceive(sender, customJson, blockNum, transactionId, timestamp) {
@@ -101,8 +101,9 @@ async function onVacancyCmdReceive(sender, customJson, blockNum, transactionId, 
       switch (customJson.command) {
         case 'unregisterApplicant':
           vacancy.unregisterApplicant(sender);
-          steem_sender.transfer(sender, vacancy.price);
-          break;
+          steem_sender.transfer(sender, vacancy.price.toFixed(3) + " SBD", "Successfully unregistered!");
+          db.saveVacancy(vacancy);
+          return;
         case 'closeApplicationPhase':
           var institutionList = await db.getInstitutionList(vacancy.institutionListID);
           vacancy.closeApplicationPhase(institutionList, timestamp);
@@ -133,29 +134,21 @@ async function onVacancyCmdReceive(sender, customJson, blockNum, transactionId, 
     response.message = e;
     console.log(e);
   }
-  steam_sender.log('vacancy', response);
+  steem_sender.log('vacancy', response);
 }
 
 async function onVacancyTransaction(sender, amount, memo) {
-  var request = JSON.parse(memo);
-  if (request.vacancy_id == undefined)
+  if(!memo)
     return;
-  var response = {};
-  response.command = 'confirmation';
-  response.transaction = transactionId;
-  response.status = 'UNKNWON';
   try {
-    var vacancy = await db.getVacancy(request.vacancy_id);
-    vacancy.registerApplicant(sender);
+    var vacancy = await db.getVacancy(memo);
+    vacancy.registerApplicant(sender, parseFloat(amount.split(" ")[0]));
     db.saveVacancy(vacancy);
-    response.status = 'OK';
+    steem_sender.transfer(sender, "0.001 SBD", "Register Successful");
   } catch (e) {
-    steam_sender.transfer(sender, ammount);
-    response.status = 'ERROR';
-    response.message = e;
+    steem_sender.transfer(sender, amount, e);
     console.log(e);
   }
-  steam_sender.log('vacancy', response);
 }
 
 module.exports.onInstitutionListCmdReceive = onInstitutionListCmdReceive;
