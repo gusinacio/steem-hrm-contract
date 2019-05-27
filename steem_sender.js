@@ -1,8 +1,10 @@
 const dsteem = require('dsteem')
 const client = new dsteem.Client('https://anyx.io')
 
-const account = proccess.env.ACCOUNT
-const active_key = proccess.env.ACTIVE_KEY
+require('dotenv-safe').config();
+
+const account = process.env.ACCOUNT
+const active_key = process.env.ACTIVE_KEY
 
 const custom_json = (my_id, my_data) => {
     const key = dsteem.PrivateKey.fromString(active_key)

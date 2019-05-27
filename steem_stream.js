@@ -1,7 +1,9 @@
 const dsteem = require('dsteem');
 const interpreter = require('./steem_interpreter.js');
+require('dotenv-safe').config();
 
-const account = proccess.env.ACCOUNT;
+
+const account = process.env.ACCOUNT;
 let opts = {};
 
 opts.addressPrefix = 'STM';

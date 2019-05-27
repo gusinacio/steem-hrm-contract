@@ -2,8 +2,9 @@ const InstitutionList = require("./institution_list.js");
 const Vacancy = require("./vacancy.js");
 
 var MongoClient = require('mongodb').MongoClient;
-var url = proccess.env.MONGO_URI;
-
+require('dotenv-safe').config();
+var url = process.env.MONGO_URI;
+console.log(url)
 
 function insertInstitutionList(il) {
   var client = MongoClient.connect(url, { useNewUrlParser: true }, function(err, client) {
