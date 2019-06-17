@@ -1,0 +1,28 @@
+{
+  "name": "steem-smartcontract",
+  "version": "1.0.0",
+  "description": "",
+  "main": "steem_stream.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "dotenv-safe": "^6.1.0",
+    "dsteem": "^0.11.2",
+    "mongodb": "^3.2.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node steem_stream.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flametuner/Steem-SmartContract.git"
+  },
+  "author": "Gustavo Inácio",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/flametuner/Steem-SmartContract/issues"
+  },
+  "homepage": "https://github.com/flametuner/Steem-SmartContract#readme"
+}
